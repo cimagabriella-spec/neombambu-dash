@@ -39,7 +39,7 @@ export default function Login() {
         <img src={hero} alt="" className="absolute inset-0 h-full w-full object-cover opacity-80" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent" />
         <div className="relative flex h-full flex-col justify-between p-14">
-          <Logo />
+          <Logo className="h-5" />
           <div className="max-w-md">
             <p className="label mb-5 text-paper/50">Content Approval Hub</p>
             <h1 className="font-display text-[44px] font-extralight leading-[1.08] tracking-tight text-paper">Planejamento, conteúdo e aprovações em um único espaço.</h1>

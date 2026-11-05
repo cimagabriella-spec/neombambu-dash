@@ -100,7 +100,7 @@ export function Shell() {
             <Menu className="h-5 w-5" strokeWidth={1.4} />
           </button>
           <div className="lg:hidden">
-            <Logo light={false} />
+            <Logo light={false} className="h-3" />
           </div>
           <Crumb />
         </div>

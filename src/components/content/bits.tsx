@@ -4,23 +4,9 @@ import { channelLabel, formatLabel, STATUS_TONE, statusLabel } from '@/lib/const
 import type { Channel, Content, Status } from '@/lib/types'
 import { cn, fmtDate } from '@/lib/utils'
 
+/** Logotipo oficial (PNG branco, fundo transparente). Em fundo claro é renderizado em preto. */
 export function Logo({ className, light = true }: { className?: string; light?: boolean }) {
-  // Wordmark provisório — substituir pelo SVG oficial da marca em /public
-  return (
-    <div className={cn('flex items-center gap-3', className)}>
-      <svg viewBox="0 0 24 28" className="h-6 w-5" aria-hidden>
-        <g stroke={light ? '#D8CFBF' : '#1C1C1A'} strokeWidth="1.3" fill="none">
-          <line x1="5" y1="3" x2="5" y2="25" />
-          <line x1="12" y1="1" x2="12" y2="27" />
-          <line x1="19" y1="3" x2="19" y2="25" />
-          <line x1="3.5" y1="10" x2="6.5" y2="10" />
-          <line x1="10.5" y1="17" x2="13.5" y2="17" />
-          <line x1="17.5" y1="8" x2="20.5" y2="8" />
-        </g>
-      </svg>
-      <span className={cn('font-display text-[15px] font-light tracking-brand', light ? 'text-paper' : 'text-ink')}>NEOBAMBU</span>
-    </div>
-  )
+  return <img src="/logo-neobambu.png" alt="NEOBAMBU" width={1215} height={174} draggable={false} className={cn('h-4 w-auto shrink-0 self-start select-none object-contain', !light && 'brightness-0', className)} />
 }
 
 export function StatusBadge({ status, className, size = 'md' }: { status: Status; className?: string; size?: 'sm' | 'md' }) {
