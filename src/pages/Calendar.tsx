@@ -15,7 +15,7 @@ type View = 'mes' | 'semana' | 'lista' | 'kanban'
 const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']
 
 export default function Calendar() {
-  const { ws, user, provider, run, lookup } = useApp()
+  const { ws, user, provider, run } = useApp()
   const { f, set, match } = useFilters()
   const [sp, setSp] = useSearchParams()
   const view = (sp.get('view') as View) || 'mes'
@@ -194,7 +194,7 @@ export default function Calendar() {
                 .filter((c) => c.publishDate === d)
                 .sort((a, b) => a.publishTime.localeCompare(b.publishTime))
                 .map((c) => (
-                  <Link key={c.id} to={`/conteudos/${c.id}`} className="grid grid-cols-[48px_1fr_auto] items-center gap-4 border-b border-line px-5 py-3 transition-colors last:border-b-0 hover:bg-paper md:grid-cols-[56px_64px_1fr_150px_180px_170px]">
+                  <Link key={c.id} to={`/conteudos/${c.id}`} className="grid grid-cols-[48px_1fr_auto] items-center gap-4 border-b border-line px-5 py-3 transition-colors last:border-b-0 hover:bg-paper md:grid-cols-[56px_64px_1fr_170px_170px]">
                     <Thumb content={c} className="h-14 w-12" />
                     <span className="hidden text-[12.5px] tabular-nums text-muted md:block">{c.publishTime}</span>
                     <span className="min-w-0">
@@ -206,7 +206,6 @@ export default function Calendar() {
                     <span className="hidden items-center gap-1.5 text-[12px] text-muted md:flex">
                       <ChannelIcon channel={c.channel} /> {formatLabel(c.format)}
                     </span>
-                    <span className="hidden truncate text-[12px] text-wood md:block">{lookup.campaign(c.campaignId)?.name ?? '—'}</span>
                     <StatusBadge status={c.status} />
                   </Link>
                 ))}

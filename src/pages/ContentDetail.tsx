@@ -118,7 +118,7 @@ function Editor({ content }: { content: Content }) {
           </div>
           <h1 className="font-display text-[26px] font-extralight leading-tight tracking-tight md:text-[34px]">{draft.title || 'Sem título'}</h1>
           <p className="mt-2 text-[13px] text-muted">
-            {fmtDate(content.publishDate, "EEEE, d 'de' MMMM yyyy")} · {content.publishTime} · {lookup.campaign(content.campaignId)?.name ?? 'Sem campanha'} · resp. {lookup.profile(content.ownerId)?.name}
+            {fmtDate(content.publishDate, "EEEE, d 'de' MMMM yyyy")} · {content.publishTime} · resp. {lookup.profile(content.ownerId)?.name}
           </p>
         </div>
 
@@ -356,7 +356,6 @@ function AdjustmentSummary({ content }: { content: Content }) {
 type Setter = <K extends keyof Content>(k: K, v: Content[K]) => void
 
 function EditorialForm({ draft, set }: { draft: Content; set: Setter }) {
-  const { ws } = useApp()
   return (
     <div className="grid gap-5 sm:grid-cols-2">
       <Field label="Título" className="sm:col-span-2">
@@ -392,47 +391,6 @@ function EditorialForm({ draft, set }: { draft: Content; set: Setter }) {
             </option>
           ))}
         </Select>
-      </Field>
-      <Field label="Campanha">
-        <Select value={draft.campaignId ?? ''} onChange={(e) => set('campaignId', e.target.value || null)}>
-          <option value="">Sem campanha</option>
-          {ws.campaigns.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </Select>
-      </Field>
-      <Field label="Linha editorial">
-        <Select value={draft.editorialLineId ?? ''} onChange={(e) => set('editorialLineId', e.target.value || null)}>
-          <option value="">Selecione</option>
-          {ws.editorialLines
-            .filter((l) => l.active || l.id === draft.editorialLineId)
-            .map((l) => (
-              <option key={l.id} value={l.id}>
-                {l.name}
-              </option>
-            ))}
-        </Select>
-      </Field>
-      <Field label="Produtos e coleções" className="sm:col-span-2">
-        <div className="flex flex-wrap gap-1.5">
-          {ws.products
-            .filter((p) => p.active || draft.productIds.includes(p.id))
-            .map((p) => {
-              const on = draft.productIds.includes(p.id)
-              return (
-                <button
-                  type="button"
-                  key={p.id}
-                  onClick={() => set('productIds', on ? draft.productIds.filter((x) => x !== p.id) : [...draft.productIds, p.id])}
-                  className={cn('border px-3 py-1.5 text-[12px] transition-colors', on ? 'border-ink bg-ink text-paper' : 'border-line bg-white text-ink/75 hover:border-ink/40')}
-                >
-                  {p.name}
-                </button>
-              )
-            })}
-        </div>
       </Field>
       <Field label="Objetivo do conteúdo" className="sm:col-span-2">
         <Textarea value={draft.objective} onChange={(e) => set('objective', e.target.value)} className="min-h-[72px]" />
@@ -498,7 +456,6 @@ function ProductionForm({ draft, set }: { draft: Content; set: Setter }) {
 }
 
 function ReadOnlySummary({ c }: { c: Content }) {
-  const { lookup } = useApp()
   const row = (label: string, value: ReactNode) => (
     <div className="grid gap-1 border-b border-line py-3.5 sm:grid-cols-[160px_1fr] sm:gap-6">
       <dt className="label pt-0.5">{label}</dt>
@@ -509,9 +466,6 @@ function ReadOnlySummary({ c }: { c: Content }) {
     <dl>
       {row('Publicação', `${fmtDate(c.publishDate, "d 'de' MMMM yyyy")} · ${c.publishTime}`)}
       {row('Canal', `${CHANNELS.find((x) => x.id === c.channel)?.label} · ${formatLabel(c.format)}`)}
-      {row('Campanha', lookup.campaign(c.campaignId)?.name)}
-      {row('Linha editorial', lookup.line(c.editorialLineId)?.name)}
-      {row('Produtos', c.productIds.map((p) => lookup.product(p)?.name).join(', '))}
       {row('Objetivo', c.objective)}
       {row('Copy da arte', c.copyArt)}
       {row('Legenda', c.caption)}

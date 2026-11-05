@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { channelLabel, formatLabel, STATUS_TONE, statusLabel } from '@/lib/constants'
 import type { Channel, Content, Status } from '@/lib/types'
 import { cn, fmtDate } from '@/lib/utils'
-import { useApp } from '@/store/app'
 
 export function Logo({ className, light = true }: { className?: string; light?: boolean }) {
   // Wordmark provisório — substituir pelo SVG oficial da marca em /public
@@ -70,8 +69,6 @@ export function Thumb({ content, className, rounded, badges = true }: { content:
 
 /** Card de publicação usado no calendário, kanban e listas. */
 export function ContentCard({ content, compact, draggable, className, showDate = true }: { content: Content; compact?: boolean; draggable?: boolean; className?: string; showDate?: boolean }) {
-  const { lookup } = useApp()
-  const campaign = lookup.campaign(content.campaignId)
   const t = STATUS_TONE[content.status]
   if (compact)
     return (
@@ -120,7 +117,6 @@ export function ContentCard({ content, compact, draggable, className, showDate =
             </>
           )}
         </div>
-        {campaign && <p className="truncate text-[11px] text-wood">{campaign.name}</p>}
         <div className="flex items-center justify-between pt-1">
           <StatusBadge status={content.status} size="sm" />
           <span className="text-[10.5px] text-muted">v{content.version}</span>

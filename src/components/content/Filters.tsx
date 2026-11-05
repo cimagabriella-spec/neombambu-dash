@@ -11,7 +11,6 @@ import { useApp } from '@/store/app'
 export interface FilterState {
   month: string // yyyy-MM
   channel: string
-  campaign: string
   status: string
   owner: string
 }
@@ -22,11 +21,10 @@ export function useFilters() {
   const f: FilterState = {
     month: sp.get('mes') ?? format(new Date(), 'yyyy-MM'),
     channel: sp.get('rede') ?? '',
-    campaign: sp.get('campanha') ?? '',
     status: sp.get('status') ?? '',
     owner: sp.get('resp') ?? '',
   }
-  const keys: Record<keyof FilterState, string> = { month: 'mes', channel: 'rede', campaign: 'campanha', status: 'status', owner: 'resp' }
+  const keys: Record<keyof FilterState, string> = { month: 'mes', channel: 'rede', status: 'status', owner: 'resp' }
   const set = (patch: Partial<FilterState>) => {
     const next = new URLSearchParams(sp)
     for (const [k, v] of Object.entries(patch)) {
@@ -39,7 +37,6 @@ export function useFilters() {
   const match = (c: Content, opts: { ignoreMonth?: boolean; ignoreStatus?: boolean } = {}) =>
     (opts.ignoreMonth || c.publishDate.startsWith(f.month)) &&
     (!f.channel || c.channel === f.channel) &&
-    (!f.campaign || c.campaignId === f.campaign) &&
     (opts.ignoreStatus || !f.status || c.status === f.status) &&
     (!f.owner || c.ownerId === f.owner)
   return { f, set, match }
@@ -50,7 +47,7 @@ export function FilterBar({ f, set, showMonth = true, showStatus = true, classNa
   const [open, setOpen] = useState(false)
   const monthDate = useMemo(() => parseISO(f.month + '-01'), [f.month])
   const shift = (n: number) => set({ month: format(addMonths(startOfMonth(monthDate), n), 'yyyy-MM') })
-  const active = [f.channel, f.campaign, f.status, f.owner].filter(Boolean).length
+  const active = [f.channel, f.status, f.owner].filter(Boolean).length
   const selects = (
     <>
       <Select value={f.channel} onChange={(e) => set({ channel: e.target.value })} className="h-9 w-full text-[12.5px] md:w-[140px]" aria-label="Rede social">
@@ -58,14 +55,6 @@ export function FilterBar({ f, set, showMonth = true, showStatus = true, classNa
         {CHANNELS.map((c) => (
           <option key={c.id} value={c.id}>
             {c.label}
-          </option>
-        ))}
-      </Select>
-      <Select value={f.campaign} onChange={(e) => set({ campaign: e.target.value })} className="h-9 w-full text-[12.5px] md:w-[180px]" aria-label="Campanha">
-        <option value="">Todas as campanhas</option>
-        {ws.campaigns.map((c) => (
-          <option key={c.id} value={c.id}>
-            {c.name}
           </option>
         ))}
       </Select>
@@ -90,7 +79,7 @@ export function FilterBar({ f, set, showMonth = true, showStatus = true, classNa
           ))}
       </Select>
       {active > 0 && (
-        <button onClick={() => set({ channel: '', campaign: '', status: '', owner: '' })} className="flex h-9 items-center gap-1 px-2 text-[12px] text-muted hover:text-ink">
+        <button onClick={() => set({ channel: '', status: '', owner: '' })} className="flex h-9 items-center gap-1 px-2 text-[12px] text-muted hover:text-ink">
           <X className="h-3.5 w-3.5" /> Limpar
         </button>
       )}

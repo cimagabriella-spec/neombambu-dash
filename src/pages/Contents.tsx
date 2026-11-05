@@ -61,7 +61,7 @@ export default function Contents() {
             <span />
             <span>Título</span>
             <span>Canal · formato</span>
-            <span>Linha editorial</span>
+            <span>Responsável</span>
             <span>Data</span>
             <span>Status</span>
           </div>
@@ -71,13 +71,13 @@ export default function Contents() {
               <span className="min-w-0">
                 <span className="block truncate text-[13.5px]">{c.title}</span>
                 <span className="mt-0.5 block truncate text-[11.5px] text-muted">
-                  {lookup.campaign(c.campaignId)?.name ?? 'Sem campanha'} · v{c.version} · {lookup.profile(c.ownerId)?.name}
+                  v{c.version} · {lookup.profile(c.ownerId)?.name}
                 </span>
               </span>
               <span className="hidden items-center gap-1.5 text-[12px] text-muted lg:flex">
                 <ChannelIcon channel={c.channel} /> {formatLabel(c.format)}
               </span>
-              <span className="hidden truncate text-[12px] text-muted lg:block">{lookup.line(c.editorialLineId)?.name ?? '—'}</span>
+              <span className="hidden truncate text-[12px] text-muted lg:block">{lookup.profile(c.ownerId)?.name ?? '—'}</span>
               <span className="hidden text-[12px] tabular-nums text-muted lg:block">
                 {fmtDate(c.publishDate, 'dd/MM/yy')} {c.publishTime}
               </span>
@@ -92,14 +92,13 @@ export default function Contents() {
 }
 
 export function NewContentDialog({ open, onClose, initialDate }: { open: boolean; onClose: () => void; initialDate?: string }) {
-  const { provider, run, ws } = useApp()
+  const { provider, run } = useApp()
   const nav = useNavigate()
   const [title, setTitle] = useState('')
   const [channel, setChannel] = useState<Channel>('instagram')
   const [fmt, setFmt] = useState<Format>('feed')
   const [date, setDate] = useState(initialDate ?? format(new Date(), 'yyyy-MM-dd'))
   const [time, setTime] = useState('10:00')
-  const [campaignId, setCampaignId] = useState('')
   useEffect(() => {
     if (open) {
       setTitle('')
@@ -107,7 +106,7 @@ export function NewContentDialog({ open, onClose, initialDate }: { open: boolean
     }
   }, [open, initialDate])
   const submit = async () => {
-    const c = await run(() => provider.createContent({ title: title.trim(), channel, format: fmt, publishDate: date, publishTime: time, campaignId: campaignId || null }), 'Conteúdo criado')
+    const c = await run(() => provider.createContent({ title: title.trim(), channel, format: fmt, publishDate: date, publishTime: time }), 'Conteúdo criado')
     if (c) nav(`/conteudos/${c.id}`)
   }
   return (
@@ -159,16 +158,6 @@ export function NewContentDialog({ open, onClose, initialDate }: { open: boolean
         </Field>
         <Field label="Horário">
           <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
-        </Field>
-        <Field label="Campanha" className="sm:col-span-2">
-          <Select value={campaignId} onChange={(e) => setCampaignId(e.target.value)}>
-            <option value="">Sem campanha</option>
-            {ws.campaigns.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </Select>
         </Field>
       </div>
     </Dialog>

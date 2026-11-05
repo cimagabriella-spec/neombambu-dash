@@ -106,7 +106,7 @@ export default function Approvals() {
                 </div>
                 <div className="mt-auto flex items-center justify-between gap-2 border-t border-line px-4 py-2.5" onClick={(e) => e.stopPropagation()}>
                   <span className="truncate text-[11px] text-muted">
-                    {lookup.campaign(c.campaignId)?.name ?? lookup.profile(c.ownerId)?.name}
+                    {lookup.profile(c.ownerId)?.name}
                     {sub && ` · enviado ${fromNow(sub)}`}
                   </span>
                   <div className="flex shrink-0 gap-1">
