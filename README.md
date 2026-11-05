@@ -26,7 +26,7 @@ navegador. Uma faixa no topo deixa isso explícito o tempo todo.
    ```sql
    update public.profiles set role = 'admin' where email = 'voce@neobambu.com.br';
    ```
-   A partir daí, papéis são definidos em Configurações › Usuários e permissões.
+   Os papéis dos demais usuários também são definidos por SQL (`role` = `marketing` ou `diretoria`).
 
 ## Regras de negócio (aplicadas no banco)
 
@@ -54,8 +54,7 @@ npm run test:sql
 - **Publicação automática nas redes**: não implementada (exige apps aprovados na Meta e no LinkedIn).
 - **Alertas agendados**: `refresh_due_notifications()` roda quando o app carrega; para alertas sem
   ninguém online, agende-a com `pg_cron`.
-- **Identidade visual**: cores são tokens em `src/index.css` (editáveis também em Configurações ›
-  Identidade visual, salvas no navegador). O wordmark em `components/content/bits.tsx` é provisório —
+- **Identidade visual**: cores são tokens em `src/index.css`. O wordmark em `components/content/bits.tsx` é provisório —
   substitua pelo SVG oficial.
 - **Artes de demonstração** são SVGs gerados (texturas de madeira/bambu), não fotografias da marca.
 
@@ -67,8 +66,7 @@ src/
   lib/data/                 DataProvider · demo (IndexedDB) · supabase
   components/preview/       previews Instagram (feed, carrossel, reels, stories) e LinkedIn (desktop/mobile)
   components/comments/      comentários por versão, respostas, resolvidos, pins na imagem
-  pages/                    Overview, Calendário, Conteúdos, Aprovações, Campanhas,
-                            Biblioteca, Histórico, Relatórios, Configurações
+  pages/                    Calendário, Conteúdos (lista e página do conteúdo), Aprovações
 supabase/migrations/        schema, RLS, triggers, RPCs, storage
 scripts/test-sql.mjs        testes do backend
 ```

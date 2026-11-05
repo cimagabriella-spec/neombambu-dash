@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowLeft, ArrowUp, Copy, FolderOpen, History, Link2, MoreHorizontal, Plus, Repeat, Send, ShieldAlert, Trash2, Upload, X } from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowUp, Copy, History, Link2, MoreHorizontal, Plus, Repeat, Send, ShieldAlert, Trash2, Upload, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ApprovalActions } from '@/components/content/ApprovalActions'
@@ -533,9 +533,8 @@ function ReadOnlySummary({ c }: { c: Content }) {
 /* ───────────────────────── artes */
 
 function AssetsManager({ draft, set }: { draft: Content; set: Setter }) {
-  const { provider, toast, ws } = useApp()
+  const { provider, toast } = useApp()
   const [busy, setBusy] = useState(0)
-  const [picker, setPicker] = useState(false)
   const [over, setOver] = useState(false)
   const input = useRef<HTMLInputElement>(null)
   const multi = draft.format === 'carrossel' || draft.format === 'documento' || draft.format === 'stories'
@@ -592,9 +591,6 @@ function AssetsManager({ draft, set }: { draft: Content; set: Setter }) {
           <Button size="sm" onClick={() => input.current?.click()} disabled={busy > 0}>
             Selecionar arquivos
           </Button>
-          <Button size="sm" variant="ghost" onClick={() => setPicker(true)}>
-            <FolderOpen className="h-3.5 w-3.5" strokeWidth={1.4} /> Da biblioteca
-          </Button>
         </div>
         <input ref={input} type="file" hidden multiple={multi} accept="image/png,image/jpeg,image/webp,image/gif,video/mp4,video/quicktime,video/webm" onChange={(e) => e.target.files && upload(e.target.files)} />
       </div>
@@ -629,31 +625,6 @@ function AssetsManager({ draft, set }: { draft: Content; set: Setter }) {
           )
         })}
       </div>
-
-      <Dialog open={picker} onClose={() => setPicker(false)} title="Biblioteca de mídia" description="Somente arquivos com uso autorizado podem ser anexados a publicações." className="max-w-3xl">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {ws.media
-            .filter((m) => m.kind !== 'file')
-            .map((m) => (
-              <button
-                key={m.id}
-                disabled={!m.authorized}
-                onClick={() => {
-                  const asset: Asset = { id: uid(), kind: m.kind === 'video' ? 'video' : 'image', name: m.name, url: m.url, path: m.path, width: m.width, height: m.height, mediaId: m.id }
-                  set('assets', multi ? [...draft.assets, asset] : [asset])
-                  setPicker(false)
-                }}
-                className="group relative border border-line text-left disabled:cursor-not-allowed"
-              >
-                <img src={m.url} alt="" className={cn('aspect-[4/3] w-full object-cover', !m.authorized && 'opacity-40 grayscale')} />
-                <div className="p-2">
-                  <p className="truncate text-[12px]">{m.name}</p>
-                  <p className={cn('truncate text-[10.5px]', m.authorized ? 'text-olive' : 'text-st-ajustes')}>{m.authorized ? 'Uso autorizado' : 'Sem autorização de uso'}</p>
-                </div>
-              </button>
-            ))}
-        </div>
-      </Dialog>
     </div>
   )
 }

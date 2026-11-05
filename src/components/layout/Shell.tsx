@@ -1,4 +1,4 @@
-import { BarChart3, Bell, CalendarDays, CheckCheck, FileStack, FolderOpen, History, LayoutGrid, LogOut, Menu, Megaphone, Settings, Stamp, X } from 'lucide-react'
+import { Bell, CalendarDays, CheckCheck, FileStack, LogOut, Menu, Stamp, X } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Avatar } from '@/components/ui'
@@ -7,16 +7,10 @@ import type { Role } from '@/lib/types'
 import { cn, fromNow } from '@/lib/utils'
 import { useApp } from '@/store/app'
 
-const NAV: { to: string; label: string; icon: typeof LayoutGrid; roles?: Role[] }[] = [
-  { to: '/', label: 'Overview', icon: LayoutGrid },
+const NAV: { to: string; label: string; icon: typeof CalendarDays; roles?: Role[] }[] = [
   { to: '/calendario', label: 'Calendário editorial', icon: CalendarDays },
   { to: '/conteudos', label: 'Conteúdos', icon: FileStack },
   { to: '/aprovacoes', label: 'Aprovações', icon: Stamp },
-  { to: '/campanhas', label: 'Campanhas', icon: Megaphone },
-  { to: '/biblioteca', label: 'Biblioteca de mídia', icon: FolderOpen, roles: ['marketing', 'admin'] },
-  { to: '/historico', label: 'Histórico de publicações', icon: History },
-  { to: '/relatorios', label: 'Relatórios', icon: BarChart3 },
-  { to: '/configuracoes', label: 'Configurações', icon: Settings },
 ]
 
 export function Shell() {
