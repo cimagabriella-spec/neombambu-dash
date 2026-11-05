@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * NEOBAMBU — tokens de marca
+ * Proposta inicial inspirada no posicionamento da marca. Substitua pelos
+ * códigos oficiais aqui (canais RGB) ou em Configurações › Identidade visual,
+ * que sobrescreve estes valores em tempo de execução.
+ */
+:root {
+  --nb-ink: 28 28 26;          /* #1C1C1A  Preto sofisticado */
+  --nb-graphite: 38 38 35;     /* #262623  Grafite (menu)     */
+  --nb-paper: 247 246 242;     /* #F7F6F2  Off-white natural  */
+  --nb-sand: 216 207 191;      /* #D8CFBF  Bege areia         */
+  --nb-wood: 184 165 143;      /* #B8A58F  Madeira clara      */
+  --nb-olive: 90 98 84;        /* #5A6254  Verde oliva        */
+  --nb-mineral: 230 229 225;   /* #E6E5E1  Cinza mineral      */
+  --nb-white: 255 255 255;     /* #FFFFFF                     */
+  --nb-line: 222 220 214;      /* linhas finas                */
+  --nb-muted: 122 120 113;     /* texto secundário            */
+
+  /* Status — códigos visuais discretos */
+  --nb-st-ideia: 168 166 158;
+  --nb-st-producao: 184 165 143;
+  --nb-st-revisao: 143 131 112;
+  --nb-st-aguardando: 176 138 74;
+  --nb-st-ajustes: 165 99 75;
+  --nb-st-aprovado: 90 98 84;
+  --nb-st-programado: 95 107 120;
+  --nb-st-publicado: 28 28 26;
+}
+
+@layer base {
+  html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  body { @apply bg-paper text-ink font-sans font-light; font-feature-settings: 'cv11', 'ss01'; }
+  h1, h2, h3, h4 { @apply font-display; }
+  ::selection { background: rgb(var(--nb-sand)); }
+  :focus-visible { outline: 1px solid rgb(var(--nb-ink)); outline-offset: 2px; }
+  input, textarea, select, button { font: inherit; }
+}
+
+@layer components {
+  .label { @apply text-[10.5px] font-medium uppercase tracking-label text-muted; }
+  .hairline { @apply border-line; }
+  .card { @apply bg-white border border-line; }
+  .grain {
+    background-image: repeating-linear-gradient(90deg, rgb(var(--nb-ink) / .025) 0 1px, transparent 1px 7px);
+  }
+  .scroll-thin { scrollbar-width: thin; scrollbar-color: rgb(var(--nb-sand)) transparent; }
+  .no-scrollbar { scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+}
+
+@media print {
+  aside, header, .no-print { display: none !important; }
+  main { padding: 0 !important; }
+}
